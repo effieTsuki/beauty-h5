@@ -107,6 +107,25 @@
   .stat .lbl { font-size: 10.5px; color: #a0788c; margin-top: 1px; }
 
   /* ================= 分类 chips ================= */
+  .search-bar {
+    display: flex; align-items: center; gap: 9px;
+    margin: 12px 16px 0; padding: 12px 14px; min-height: 46px; border-radius: 13px;
+    border: 1.5px solid transparent; background: var(--warm-gray);
+    transition: border .15s ease, box-shadow .15s ease;
+  }
+  .search-bar:focus-within { border-color: var(--primary-bright); box-shadow: 0 0 0 4px rgba(224,100,140,.15); }
+  .search-bar svg { width: 17px; height: 17px; stroke: var(--primary); flex: 0 0 auto; }
+  .search-bar input[type=text] {
+    flex: 1; border: none; outline: none; background: transparent; padding: 0;
+    font-size: 14.5px; color: var(--text); min-width: 0;
+  }
+  .search-bar input::placeholder { color: var(--muted); }
+  .search-bar .clear-btn {
+    display: none; width: 18px; height: 18px; border-radius: 50%;
+    background: #f0d7e0; color: #a06f82; font-size: 11px; line-height: 1;
+    align-items: center; justify-content: center; flex: 0 0 auto; cursor: pointer;
+  }
+  .search-bar.has-value .clear-btn { display: flex; }
   .cats {
     display: flex; gap: 8px; overflow-x: auto; padding: 14px 16px 4px;
     scrollbar-width: none;
@@ -586,6 +605,13 @@
     </div>
   </header>
 
+  <!-- 搜索：按名称本地模糊过滤 -->
+  <div class="search-bar" id="search-bar">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input type="text" id="search-input" placeholder="搜名称，如：精华" maxlength="30" enterkeyhint="search">
+    <span class="clear-btn" id="search-clear">✕</span>
+  </div>
+
   <!-- 分类 -->
   <nav class="cats" id="cats"></nav>
 
@@ -823,7 +849,7 @@
     all: [],        // 全量数据（云端拉取 / 本地缓存恢复）
     view: [],       // 当前筛选后的视图数据（固定按金额降序排）
     hasCache: false, // 本地是否存有快照（网络失败时降级展示）
-    filter: { category: '全部', status: '全部' },
+    filter: { category: '全部', status: '全部', search: '' },
     editingId: null,
     pendingImage: null,
     origImageUrl: null  // 编辑开始时的原图片地址（保存换新图后用于清理旧文件）
@@ -915,9 +941,11 @@
       const c = JSON.parse(raw);
       if (!c || !Array.isArray(c.list)) return;
       state.all = c.list;
-      if (c.filter && c.filter.category && c.filter.status) state.filter = { category: c.filter.category, status: c.filter.status };
+      if (c.filter && c.filter.category && c.filter.status) state.filter = { category: c.filter.category, status: c.filter.status, search: typeof c.filter.search === 'string' ? c.filter.search : '' };
       state.hasCache = true;
       renderCats(); renderTags();
+      $('#search-input').value = state.filter.search;
+      $('#search-bar').classList.toggle('has-value', !!state.filter.search);
       applyView(); renderGrid();
     } catch (e) { /* 缓存损坏则忽略，走正常网络加载 */ }
   }
@@ -965,6 +993,8 @@
   // 记录是否匹配当前筛选（applyView 本地筛选视图时使用）
   function matchesFilter(c) {
     if (state.filter.category !== '全部' && c.category !== state.filter.category) return false;
+    const q = state.filter.search.trim().toLowerCase();
+    if (q && !(c.name || '').toLowerCase().includes(q)) return false;
     if (state.filter.status !== '全部') {
       if (state.filter.status === '未开封' && isOpened(c)) return false;
       if (state.filter.status === '已开封' && !isOpened(c)) return false;
@@ -1062,13 +1092,14 @@
     $('#stat-opened').textContent = opened;
 
     if (!list.length) {
+      const q = state.filter.search.trim();
       el.innerHTML = '<div class="empty">' +
         '<div class="art">' + emptyArtSvg + '</div>' +
-        '<div class="t">梳妆台还空着</div>' +
-        '<div class="s">拍张照片，把美妆收进来</div>' +
-        '<button class="empty-btn" id="empty-add">＋ 添加第一件</button>' +
+        '<div class="t">' + (q ? '没有找到相关美妆' : '梳妆台还空着') + '</div>' +
+        '<div class="s">' + (q ? '换个关键词试试' : '拍张照片，把美妆收进来') + '</div>' +
+        (q ? '' : '<button class="empty-btn" id="empty-add">＋ 添加第一件</button>') +
       '</div>';
-      $('#empty-add').onclick = openAdd;
+      if (!q) $('#empty-add').onclick = openAdd;
       return;
     }
     el.innerHTML = list.map((c, i) => {
@@ -1576,6 +1607,19 @@
 
   // ---------- 事件绑定 ----------
   $('#fab').onclick = openAdd;
+  // 搜索：数据已全量在内存，输入防抖 200ms 本地过滤
+  const searchInput = $('#search-input');
+  let searchTimer = null;
+  function setSearch(v) {
+    state.filter.search = v;
+    $('#search-bar').classList.toggle('has-value', !!v);
+    applyView(); renderGrid();
+  }
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => setSearch(searchInput.value.trim()), 200);
+  });
+  $('#search-clear').onclick = () => { searchInput.value = ''; setSearch(''); searchInput.focus(); };
   $('#mask').onclick = closeSheet;
   $('#btn-cancel').onclick = closeSheet;
   $('#upload-box').onclick = () => $('#file-input').click();
