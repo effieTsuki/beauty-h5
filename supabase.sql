@@ -11,7 +11,7 @@ create table if not exists public.cosmetics (
   id           uuid primary key default gen_random_uuid(),
   owner        text not null default '',          -- 设备标识，用于数据隔离
   name         text not null,                     -- 名称
-  brand        text,                              -- 品牌
+  brand        text,                              -- 品牌（旧版字段，仅兼容历史数据，新表单不再填写）
   category     text not null default '其他',       -- 分类：洁面/爽肤水/精华/乳液/面霜/眼霜/防晒/面膜/卸妆/底妆/口红/眼妆/香氛/身体护理/美发/工具/其他（text 字段，无枚举约束，可自由扩展）
   capacity     text,                              -- 容量规格：30ml / 50g / 10片 等（手填）
   shade        text,                              -- 色号：01 / W03 / 小辣椒

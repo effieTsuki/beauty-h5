@@ -192,11 +192,10 @@
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .card .meta { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; min-height: 18px; }
-  .ppill, .bpill, .shpill, .cpill {
+  .ppill, .shpill, .cpill {
     font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 999px; line-height: 1.5;
   }
   .ppill { background: #e9f1fa; color: #5f7fa3; }
-  .bpill { background: #f0eef9; color: #6f6aa3; }
   .shpill { background: #f4e8f6; color: #a05487; }
   .cpill { background: #e6f2ee; color: #4a8a75; }
   .card .foot { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; }
@@ -624,11 +623,7 @@
     </div>
     <div class="field">
       <label>名称 <span style="color:var(--danger)">*</span></label>
-      <input type="text" id="f-name" placeholder="例如：兰蔻小黑瓶精华 50ml">
-    </div>
-    <div class="field">
-      <label>品牌</label>
-      <input type="text" id="f-brand" placeholder="如 兰蔻、雅诗兰黛">
+      <input type="text" id="f-name" placeholder="例如：小黑瓶精华 30ml">
     </div>
     <div class="field">
       <label>分类</label>
@@ -1081,7 +1076,6 @@
       const price = Number(c.price) || 0;
       const catColor = CATEGORY_COLORS[c.category] || '#b09a88';
       const meta =
-        (c.brand ? '<span class="bpill">' + esc(c.brand) + '</span>' : '') +
         (c.shade ? '<span class="shpill">' + esc(c.shade) + '</span>' : '') +
         (c.capacity ? '<span class="cpill">' + esc(c.capacity) + '</span>' : '') +
         (c.platform ? '<span class="ppill">' + esc(c.platform) + '</span>' : '');
@@ -1213,7 +1207,7 @@
     state.editingId = null; state.pendingImage = null; state.origImageUrl = null;
     $('#sheet-title').textContent = '添加美妆';
     $('#f-name').value = ''; $('#f-price').value = ''; $('#f-note').value = '';
-    $('#f-brand').value = ''; $('#f-shade').value = ''; $('#f-capacity').value = '';
+    $('#f-shade').value = ''; $('#f-capacity').value = '';
     formCat = CATEGORIES[0];
     formDate = todayStr();   // 购入日期默认当天，可清空或修改
     formOpenDate = ''; formOpened = '未开封'; formExpDate = ''; formPlatform = '';
@@ -1233,7 +1227,6 @@
     $('#f-name').value = item.name || '';
     $('#f-price').value = item.price != null ? item.price : '';
     $('#f-note').value = item.note || '';
-    $('#f-brand').value = item.brand || '';
     $('#f-shade').value = item.shade || '';
     $('#f-capacity').value = item.capacity || '';
     formCat = item.category || CATEGORIES[0];
@@ -1614,7 +1607,6 @@
       const opened = formOpened === '已开封';
       const payload = {
         name: name,
-        brand: $('#f-brand').value.trim() || null,
         category: formCat,
         capacity: $('#f-capacity').value.trim() || null,
         shade: $('#f-shade').value.trim() || null,
