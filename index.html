@@ -145,8 +145,6 @@
   .tag.reset.on {
     border-style: solid; color: var(--primary-deep); background: #fceef3; border-color: #f0b7ca;
   }
-  .tag .sdot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
-  .row-break { flex-basis: 100%; height: 0; width: 0; }
 
   /* ================= 卡片网格 ================= */
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; padding: 10px 16px 24px; }
@@ -194,11 +192,9 @@
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .card .meta { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; min-height: 18px; }
-  .card .meta .cdot { width: 11px; height: 11px; border-radius: 50%; border: 1px solid rgba(0,0,0,.07); flex: 0 0 auto; }
-  .gpill, .ppill, .bpill, .shpill, .cpill, .upill {
+  .ppill, .bpill, .shpill, .cpill {
     font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 999px; line-height: 1.5;
   }
-  .gpill { background: #f8e9ef; color: #9c5470; }
   .ppill { background: #e9f1fa; color: #5f7fa3; }
   .bpill { background: #f0eef9; color: #6f6aa3; }
   .shpill { background: #f4e8f6; color: #a05487; }
@@ -326,20 +322,6 @@
     background: var(--grad); border-color: transparent; color: #fff; font-weight: 700;
     box-shadow: 0 4px 14px rgba(224,100,140,.3);
   }
-  .swatches { display: flex; flex-wrap: wrap; gap: 10px; }
-  .swatch {
-    width: 31px; height: 31px; border-radius: 50%;
-    border: 2.5px solid #fff;
-    outline: 1.5px solid var(--border);
-    position: relative; transition: all .15s ease;
-  }
-  .swatch:active { transform: scale(.9); }
-  .swatch.on { outline: 2.5px solid var(--primary-bright); transform: scale(1.15); }
-  .swatch.checked::after {
-    content: ''; position: absolute; inset: 0; margin: auto; width: 13px; height: 13px;
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') center/cover no-repeat;
-  }
-
   /* 上传框 */
   .upload { display: flex; align-items: center; gap: 13px; }
   .upload .box {
@@ -646,31 +628,19 @@
     </div>
     <div class="field">
       <label>品牌</label>
-      <input type="text" id="f-brand" placeholder="输入名称可自动识别，也可手动填写">
+      <input type="text" id="f-brand" placeholder="如 兰蔻、雅诗兰黛">
     </div>
     <div class="field">
       <label>分类</label>
       <div class="seg" id="f-cat"></div>
     </div>
     <div class="field">
-      <label>容量 / 规格（再点一次取消）</label>
-      <div class="seg" id="f-capacity"></div>
+      <label>容量 / 规格（选填）</label>
+      <input type="text" id="f-capacity" placeholder="如 30ml / 50g / 10片" maxlength="20">
     </div>
     <div class="field">
       <label>色号（选填）</label>
       <input type="text" id="f-shade" placeholder="如 01、W03、小辣椒">
-    </div>
-    <div class="field">
-      <label>颜色（选填）</label>
-      <div class="swatches" id="f-color"></div>
-    </div>
-    <div class="field">
-      <label>适用肤质</label>
-      <div class="seg" id="f-skin"></div>
-    </div>
-    <div class="field">
-      <label>使用时段（可多选）</label>
-      <div class="seg" id="f-usage"></div>
     </div>
     <div class="buy-grid">
       <div class="field">
@@ -695,16 +665,24 @@
       </div>
     </div>
     <div class="field">
+      <label>开封状态</label>
+      <div class="seg" id="f-opened"></div>
+    </div>
+    <div class="field" id="field-open-date">
       <label>开封日期</label>
       <div class="date-field">
-        <svg id="open-cal-btn" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3 2.5-5 5.5-5 9a5 5 0 0 0 10 0c0-3.5-2-6.5-5-9z"/></svg>
-        <input type="text" id="f-open-date" placeholder="开封那天填一下，自动算保质期">
+        <svg id="open-cal-btn" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3 2.5-5 5.5-5 9a5 5 0 0 0 10 0c0-3.5-2-6.5-5-9z"/><path d="M12 13.5c-1.2 1-1.8 2.2-1.8 3.5a1.8 1.8 0 1 0 3.6 0c0-1.3-.6-2.5-1.8-3.5z"/></svg>
+        <input type="text" id="f-open-date" placeholder="开封那天填一下（选填）">
         <span class="clear-btn" id="open-date-clear">✕</span>
       </div>
     </div>
     <div class="field">
-      <label>开封后建议用完</label>
-      <div class="seg" id="f-pao"></div>
+      <label>到期日期（选填）</label>
+      <div class="date-field">
+        <svg id="exp-cal-btn" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 3.5"/></svg>
+        <input type="text" id="f-exp-date" placeholder="填包装上的到日，如 2027-06-01">
+        <span class="clear-btn" id="exp-date-clear">✕</span>
+      </div>
     </div>
     <div class="field">
       <label>备注</label>
@@ -831,140 +809,15 @@
   const ANON_KEY = CFG.anonKey || '';
 
   const CATEGORIES = ['洁面', '爽肤水', '精华', '乳液', '面霜', '眼霜', '防晒', '面膜', '卸妆', '底妆', '口红', '眼妆', '香氛', '身体护理', '美发', '工具', '其他'];
-  const SKINS = ['油皮', '干皮', '混合', '敏感', '通用'];
-  const USAGE_TIMES = ['早', '晚'];
   const PLATFORMS = ['淘宝', '京东', '拼多多', '唯品会', '抖音商城', '免税店', '代购', '专柜', '线下门店', '其他'];
   const STATUSES = ['未开封', '已开封', '已超期'];
-  const PAO_OPTS = ['6个月', '12个月', '24个月', '36个月'];
-
-  // 容量按分类联动：液体 ml / 膏体 g / 片装 / 口红 g / 香氛 / 大瓶 / 工具件数
-  const CAPACITY_SETS = {
-    '洁面': ['50ml', '80ml', '100ml', '120ml', '150ml', '200ml'],
-    '爽肤水': ['10ml', '15ml', '30ml', '50ml', '75ml', '100ml', '150ml', '200ml'],
-    '精华': ['15ml', '20ml', '30ml', '50ml', '75ml', '100ml'],
-    '乳液': ['30ml', '50ml', '100ml', '150ml', '200ml'],
-    '面霜': ['15ml', '30ml', '50ml', '15g', '30g', '50g'],
-    '眼霜': ['5g', '15g', '20g', '30g', '15ml'],
-    '防晒': ['20ml', '30ml', '50ml', '60ml', '80ml', '100ml'],
-    '面膜': ['单件', '5片', '10片', '20片', '30片', '50片'],
-    '卸妆': ['50ml', '100ml', '150ml', '200ml', '250ml', '400ml'],
-    '底妆': ['15ml', '25ml', '30ml', '40ml', '50ml', '8g', '10g', '12g'],
-    '口红': ['1.5g', '2g', '3g', '3.5g', '4g', '5g'],
-    '眼妆': ['0.8g', '1.2g', '1.5g', '2g', '3g', '5g', '单件'],
-    '香氛': ['10ml', '30ml', '50ml', '75ml', '100ml', '200ml'],
-    '身体护理': ['50ml', '100ml', '200ml', '250ml', '300ml', '500ml'],
-    '美发': ['80ml', '250ml', '400ml', '500ml', '750ml', '1L'],
-    '工具': ['单件', '2件', '3件', '套装'],
-    '其他': ['10ml', '15ml', '30ml', '50ml', '75ml', '100ml', '150ml', '200ml']
-  };
-  function capacityOptionsFor(cat) { return CAPACITY_SETS[cat] || CAPACITY_SETS['其他']; }
-
-  const COLORS = [
-    '#111827','#f8fafc','#f2e0cf','#eccfb2','#dfb38c','#c9986b','#9ca3af','#0ea5e9',
-    '#1d4ed8','#10b981','#065f46','#eab308','#f97316','#ef4444','#ec4899','#8b5cf6',
-    '#92400e','#1e293b'
-  ];
+  const OPENED_OPTS = ['未开封', '已开封'];
   const CATEGORY_COLORS = {
     '洁面':'#7fb5a3','爽肤水':'#6fa8c9','精华':'#c9825e','乳液':'#d8b36a','面霜':'#d98aa6',
     '眼霜':'#b48ec9','防晒':'#e8b04b','面膜':'#8fb878','卸妆':'#9a8fc4','底妆':'#d99a7e',
     '口红':'#c2546a','眼妆':'#6b6b8d','香氛':'#c98fd4','身体护理':'#7db8c9','美发':'#c9a06f',
     '工具':'#98a3ad','其他':'#b09a88'
   };
-  const USAGE_COLORS = { '早': '#d9a13b', '晚': '#8b7bc8' };
-
-  // ---------- 名称智能匹配：颜色关键词（长词在前，避免"米白"误配"白"、"藏青"误配"蓝"） ----------
-  const COLOR_KEYWORDS = [
-    [['米白','米色','米黄','杏色','驼色','卡其','奶油','燕麦'], '#f2e0cf'],
-    [['藏青','宝蓝','海军蓝','克莱因蓝'], '#1e293b'],
-    [['墨绿','军绿','牛油果'], '#065f46'],
-    [['天蓝','湖蓝','浅蓝','雾霾'], '#0ea5e9'],
-    [['酒红','枣红','枫叶','番茄','脏橘'], '#ef4444'],
-    [['奶茶','豆沙','裸色'], '#dfb38c'],
-    [['正红','大红','辣椒','红'], '#ef4444'],
-    [['白'], '#f8fafc'],
-    [['黑'], '#111827'],
-    [['灰'], '#9ca3af'],
-    [['蓝'], '#1d4ed8'],
-    [['绿'], '#10b981'],
-    [['黄'], '#eab308'],
-    [['橙','橘'], '#f97316'],
-    [['粉'], '#ec4899'],
-    [['紫'], '#8b5cf6'],
-    [['棕','咖','褐'], '#92400e']
-  ];
-  // ---------- 名称智能匹配：分类关键词（自上而下首个命中生效；"精华水"归爽肤水，故爽肤水组在前） ----------
-  const CATEGORY_KEYWORDS = [
-    [['面膜','冻膜','泥膜'], '面膜'],
-    [['卸妆','洗甲','卸甲'], '卸妆'],
-    [['洁面','洗面','洁颜','去角质'], '洁面'],
-    [['香水','香氛','淡香精','香体','edp','edt'], '香氛'],
-    [['眼影','眼线','睫毛','眉笔','眉粉','染眉'], '眼妆'],
-    [['口红','唇釉','唇泥','唇彩','唇蜜','唇膏','润唇'], '口红'],
-    [['粉底','气垫','遮瑕','散粉','粉饼','腮红','修容','高光','定妆','隔离','素颜'], '底妆'],
-    [['眼霜','眼胶','眼部精华'], '眼霜'],
-    [['爽肤水','柔肤水','化妆水','精华水','纯露'], '爽肤水'],
-    [['精华','安瓶','原液','次抛','肌底'], '精华'],
-    [['面霜','晚霜','日霜'], '面霜'],
-    [['乳液','润肤乳'], '乳液'],
-    [['防晒'], '防晒'],
-    [['身体乳','护手','沐浴','润体','颈霜','身体磨砂'], '身体护理'],
-    [['洗发','护发','发膜','发油','洗护','头皮'], '美发'],
-    [['化妆刷','美妆蛋','粉扑','睫毛夹','刷具','工具','假睫毛'], '工具']
-  ];
-  // ---------- 名称智能匹配：品牌关键词（英文按词边界匹配，防止 soft 命中 tf 之类误伤） ----------
-  const BRAND_KEYWORDS = [
-    [['sk-ii','skii','sk2','sk-2','神仙水'], 'SK-II'],
-    [['兰蔻','lancome','小黑瓶','菁纯'], '兰蔻'],
-    [['雅诗兰黛','estee lauder','estee','小棕瓶'], '雅诗兰黛'],
-    [['海蓝之谜','la mer','lamer','精粹水'], '海蓝之谜'],
-    [['资生堂','shiseido','红腰子'], '资生堂'],
-    [['欧莱雅','loreal',"l'oreal",'紫熨斗'], '欧莱雅'],
-    [['娇兰','guerlain'], '娇兰'],
-    [['迪奥','dior','999'], '迪奥'],
-    [['香奈儿','chanel'], '香奈儿'],
-    [['圣罗兰','ysl','杨树林','小金条'], 'YSL'],
-    [['纪梵希','givenchy','小羊皮'], '纪梵希'],
-    [['阿玛尼','armani','红气垫'], '阿玛尼'],
-    [['tom ford','汤姆福特','tf'], 'Tom Ford'],
-    [['mac','魅可'], 'MAC'],
-    [['nars','纳斯'], 'NARS'],
-    [['娇韵诗','clarins'], '娇韵诗'],
-    [['赫莲娜','helena rubinstein','helena','黑绷带','绿宝瓶'], '赫莲娜'],
-    [['修丽可','skinceuticals','skin ceuticals'], '修丽可'],
-    [['珂润','curél','curel'], '珂润'],
-    [['理肤泉','la roche','roche-posay'], '理肤泉'],
-    [['薇姿','vichy'], '薇姿'],
-    [['雅漾','avene'], '雅漾'],
-    [['olay','玉兰油','小白伞','淡斑小白瓶'], 'OLAY'],
-    [['珀莱雅','proya','双抗','红宝石','源力'], '珀莱雅'],
-    [['薇诺娜','winona','特护霜'], '薇诺娜'],
-    [['自然堂','chcedo'], '自然堂'],
-    [['百雀羚','pechoin'], '百雀羚'],
-    [['润百颜','夸迪','米蓓尔','肌活','biohyalux'], '华熙生物'],
-    [['至本','zhiben'], '至本'],
-    [['溪木源','simpcare'], '溪木源'],
-    [['pmpm'], 'PMPM'],
-    [['瑷尔博士','dr alva'], '瑷尔博士'],
-    [['敷尔佳'], '敷尔佳'],
-    [['可复美'], '可复美'],
-    [['芙丽芳丝','freeplus'], '芙丽芳丝'],
-    [['悦木之源','origins','菌菇水'], '悦木之源'],
-    [['科颜氏','kiehl','白泥','金盏花'], '科颜氏'],
-    [['倩碧','clinique','黄油'], '倩碧'],
-    [['黛珂','decorte','紫苏水'], '黛珂'],
-    [['肌肤之钥','cpb'], '肌肤之钥'],
-    [['雪花秀','sulwhasoo'], '雪花秀'],
-    [['天气丹','whoo'], '后'],
-    [['欧舒丹','l occitane','occitane'], '欧舒丹'],
-    [['安热沙','anessa','安耐晒'], '安热沙'],
-    [['怡思丁','isdin'], '怡思丁'],
-    [['卡诗','kerastase'], '卡诗'],
-    [['花西子','florasis'], '花西子'],
-    [['完美日记','perfect diary'], '完美日记'],
-    [['橘朵','judydoll'], '橘朵'],
-    [['彩棠','timage'], '彩棠'],
-    [['毛戈平','maogeping'], '毛戈平']
-  ];
 
   // ---------- 状态 ----------
   const PASS_KEY = 'beauty_pass_hash';
@@ -975,7 +828,7 @@
     all: [],        // 全量数据（云端拉取 / 本地缓存恢复）
     view: [],       // 当前筛选后的视图数据（固定按金额降序排）
     hasCache: false, // 本地是否存有快照（网络失败时降级展示）
-    filter: { category: '全部', skin: '全部', usage: '全部', status: '全部' },
+    filter: { category: '全部', status: '全部' },
     editingId: null,
     pendingImage: null,
     origImageUrl: null  // 编辑开始时的原图片地址（保存换新图后用于清理旧文件）
@@ -1014,20 +867,15 @@
     return m > 0 ? y + '年' + m + '个月' : y + '年';
   }
 
-  // 开封后剩余安全月数（未开封返回 null）
-  function monthsLeft(c) {
-    if (!c.opened_at) return null;
-    const pao = Number(c.pao_months) || 12;
-    const d = new Date(c.opened_at + 'T00:00:00');
-    return pao - (Date.now() - d.getTime()) / (30 * 86400000);
-  }
-
-  // 颜色与白混合（ratio 为原色占比 0~1），生成浅色底
-  function mixWhite(hex, ratio) {
-    const n = hex.replace('#', '');
-    const r = parseInt(n.slice(0, 2), 16), g = parseInt(n.slice(2, 4), 16), b = parseInt(n.slice(4, 6), 16);
-    const m = (x) => Math.round(255 + (x - 255) * ratio).toString(16).padStart(2, '0');
-    return '#' + m(r) + m(g) + m(b);
+  // 开封状态：显式记录（opened 字段）；老数据无该字段时按开封日期兜底
+  function isOpened(c) { return c.opened === true || (c.opened == null && !!c.opened_at); }
+  // 到期状态：直接看到期日期，不再按开封时间推算；已过=over，60 天内=soon
+  function expireState(c) {
+    if (!c.expire_date) return '';
+    const days = Math.ceil((new Date(c.expire_date + 'T00:00:00').getTime() - Date.now()) / 86400000);
+    if (days < 0) return 'over';
+    if (days <= 60) return 'soon';
+    return '';
   }
 
   // ---------- API ----------
@@ -1072,7 +920,7 @@
       const c = JSON.parse(raw);
       if (!c || !Array.isArray(c.list)) return;
       state.all = c.list;
-      if (c.filter && c.filter.category && c.filter.skin && c.filter.usage && c.filter.status) state.filter = c.filter;
+      if (c.filter && c.filter.category && c.filter.status) state.filter = { category: c.filter.category, status: c.filter.status };
       state.hasCache = true;
       renderCats(); renderTags();
       applyView(); renderGrid();
@@ -1122,12 +970,10 @@
   // 记录是否匹配当前筛选（applyView 本地筛选视图时使用）
   function matchesFilter(c) {
     if (state.filter.category !== '全部' && c.category !== state.filter.category) return false;
-    if (state.filter.skin !== '全部' && c.skin !== state.filter.skin) return false;
-    if (state.filter.usage !== '全部' && !(c.usage_time || []).includes(state.filter.usage)) return false;
     if (state.filter.status !== '全部') {
-      if (state.filter.status === '未开封' && c.opened_at) return false;
-      if (state.filter.status === '已开封' && !c.opened_at) return false;
-      if (state.filter.status === '已超期' && !(c.opened_at && monthsLeft(c) <= 0)) return false;
+      if (state.filter.status === '未开封' && isOpened(c)) return false;
+      if (state.filter.status === '已开封' && !isOpened(c)) return false;
+      if (state.filter.status === '已超期' && expireState(c) !== 'over') return false;
     }
     return true;
   }
@@ -1189,28 +1035,6 @@
 
   function renderTags() {
     const el = $('#tags'); el.innerHTML = '';
-    ['全部', ...SKINS].forEach(s => {
-      const b = document.createElement('button');
-      b.className = 'tag' + (s === '全部' ? ' reset' : '') + (state.filter.skin === s ? ' on' : '');
-      b.textContent = s === '全部' ? '肤质不限' : s;
-      b.onclick = () => { state.filter.skin = s; renderTags(); applyView(); renderGrid(); };
-      el.appendChild(b);
-    });
-    const br1 = document.createElement('span'); br1.className = 'row-break'; el.appendChild(br1);
-    ['全部', ...USAGE_TIMES].forEach(u => {
-      const b = document.createElement('button');
-      b.className = 'tag' + (u === '全部' ? ' reset' : '') + (state.filter.usage === u ? ' on' : '');
-      b.textContent = u === '全部' ? '时段不限' : u;
-      if (USAGE_COLORS[u]) {
-        const d = document.createElement('span');
-        d.className = 'sdot';
-        d.style.background = USAGE_COLORS[u];
-        b.insertBefore(d, b.firstChild);
-      }
-      b.onclick = () => { state.filter.usage = u; renderTags(); applyView(); renderGrid(); };
-      el.appendChild(b);
-    });
-    const br2 = document.createElement('span'); br2.className = 'row-break'; el.appendChild(br2);
     ['全部', ...STATUSES].forEach(s => {
       const b = document.createElement('button');
       b.className = 'tag' + (s === '全部' ? ' reset' : '') + (state.filter.status === s ? ' on' : '');
@@ -1220,27 +1044,24 @@
     });
   }
 
-  // 卡片右下角的开封/保质状态 pill
+  // 卡片右下角的开封/到期状态 pill（到期信息直接来自到期日期，不再推算）
   function statusPill(c) {
-    if (!c.opened_at) {
-      const t = timeSince(c.purchased_at);
-      return '<span class="age-pill">' + (t || '未开封') + '</span>';
+    const st = expireState(c);
+    const cls = st === 'over' ? ' over' : (st === 'soon' ? ' soon' : '');
+    const suffix = st === 'over' ? ' · 已超期' : (st === 'soon' ? ' · 快到期' : '');
+    if (isOpened(c)) {
+      const t = c.opened_at ? timeSince(c.opened_at) : '';
+      return '<span class="age-pill' + cls + '">' + (t ? '开封' + t : '已开封') + suffix + '</span>';
     }
-    const t = timeSince(c.opened_at);
-    const left = monthsLeft(c);
-    let cls = '', suffix = '';
-    if (left != null) {
-      if (left <= 0) { cls = ' over'; suffix = ' · 已超期'; }
-      else if (left < 2) { cls = ' soon'; suffix = ' · 快到期'; }
-    }
-    return '<span class="age-pill' + cls + '">开封' + t + suffix + '</span>';
+    const t = timeSince(c.purchased_at);
+    return '<span class="age-pill' + cls + '">' + (t || '未开封') + suffix + '</span>';
   }
 
   function renderGrid() {
     const el = $('#grid');
     const list = state.view;
     const total = list.reduce((s, c) => s + (Number(c.price) || 0), 0);
-    const opened = list.filter(c => c.opened_at).length;
+    const opened = list.filter(c => isOpened(c)).length;
     $('#stat-count').textContent = list.length;
     $('#stat-total').textContent = '¥' + fmtMoney(total);
     $('#stat-opened').textContent = opened;
@@ -1256,22 +1077,13 @@
       return;
     }
     el.innerHTML = list.map((c, i) => {
-      const color = c.color || '';
-      const swatch = color ? '<span class="cdot" style="background:' + esc(color) + (color.toLowerCase() === '#f8fafc' ? ';border-color:#cbd5e1' : '') + '"></span>' : '';
       const img = c.image_url ? '<img src="' + esc(c.image_url) + '" loading="lazy" alt="">' : phHtml;
       const price = Number(c.price) || 0;
       const catColor = CATEGORY_COLORS[c.category] || '#b09a88';
-      const usagePills = (c.usage_time || []).map(u => {
-        const uc = USAGE_COLORS[u] || '#b09a88';
-        return '<span class="upill" style="background:' + mixWhite(uc, .16) + ';color:' + uc + '">' + esc(u) + '</span>';
-      }).join('');
       const meta =
         (c.brand ? '<span class="bpill">' + esc(c.brand) + '</span>' : '') +
-        swatch +
         (c.shade ? '<span class="shpill">' + esc(c.shade) + '</span>' : '') +
         (c.capacity ? '<span class="cpill">' + esc(c.capacity) + '</span>' : '') +
-        (c.skin && c.skin !== '通用' ? '<span class="gpill">' + esc(c.skin) + '</span>' : '') +
-        usagePills +
         (c.platform ? '<span class="ppill">' + esc(c.platform) + '</span>' : '');
       return '<div class="card" style="animation-delay:' + Math.min(i * 45, 400) + 'ms" data-id="' + esc(c.id) + '">' +
         '<div class="thumb">' + img +
@@ -1367,172 +1179,51 @@
     });
   }
 
-  let formColor = '';
-  let formUsage = [];
   let formCat = CATEGORIES[0];
-  let formSkin = '通用';
-  let formDate = '';       // 购入日期 'YYYY-MM-DD' 或 ''
-  let formOpenDate = '';   // 开封日期
-  let formPao = '12个月';  // 开封后建议用完
-  let formPlatform = '';   // 购入渠道
-  let formCapacity = '';   // 容量/规格（可空）
+  let formDate = '';         // 购入日期 'YYYY-MM-DD' 或 ''
+  let formOpenDate = '';     // 开封日期
+  let formOpened = '未开封'; // 开封状态：未开封 / 已开封
+  let formExpDate = '';      // 到期日期 'YYYY-MM-DD' 或 ''
+  let formPlatform = '';     // 购入渠道
   let tempPlatform = '';
-  let formColorTouched = false;    // 手动选过颜色后不再随名称自动匹配
-  let formCatTouched = false;      // 手动选过分类
-  let formBrandTouched = false;    // 手动改过品牌
-  let formCapacityTouched = false; // 手动选过容量
-
-  function renderColorPicker() {
-    const el = $('#f-color'); el.innerHTML = '';
-    COLORS.forEach(c => {
-      const b = document.createElement('button');
-      b.className = 'swatch' + (formColor === c ? ' on checked' : '');
-      b.style.background = c;
-      b.onclick = () => { formColor = c; formColorTouched = true; renderColorPicker(); };
-      el.appendChild(b);
-    });
-  }
-
-  // 英文关键词按词边界匹配（英文词后跟数字也算命中，如 dior999；但 soft 不会误中 tf）
-  function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-  function matchKeyword(name, kw) {
-    if (/^[a-z0-9' -]+$/.test(kw)) {
-      return new RegExp('(^|[^a-z0-9])' + escRe(kw) + '($|[^a-z])').test(name);
-    }
-    return name.indexOf(kw) >= 0;
-  }
-
-  // 名称智能匹配：品牌 / 颜色 / 分类 / 容量（未手动选择时；每次输入先复位，避免上一次的残留）
-  function smartMatch() {
-    const name = $('#f-name').value.trim().toLowerCase();
-    // 名称清空：把智能匹配自动填的字段复位（手动填过/选过的不动）
-    if (!name) {
-      if (!formBrandTouched) $('#f-brand').value = '';
-      if (!formColorTouched) { formColor = ''; renderColorPicker(); }
-      if (!formCapacityTouched) formCapacity = '';
-      if (!formCatTouched) {
-        formCat = CATEGORIES[0];
-        buildSeg('f-cat', CATEGORIES, () => formCat, v => onFormCatChange(v, true));
-        onFormCatChange(formCat, false);
-      }
-      buildCapacity();
-      return;
-    }
-    if (!formColorTouched) {
-      formColor = '';
-      for (const row of COLOR_KEYWORDS) {
-        if (row[0].some(k => name.indexOf(k) >= 0)) { formColor = row[1]; break; }
-      }
-      renderColorPicker();
-    }
-    if (!formCatTouched) {
-      const prev = formCat;
-      formCat = CATEGORIES[0];
-      for (const row of CATEGORY_KEYWORDS) {
-        if (row[0].some(k => matchKeyword(name, k))) { formCat = row[1]; break; }
-      }
-      if (formCat !== prev) {
-        buildSeg('f-cat', CATEGORIES, () => formCat, v => onFormCatChange(v, true));
-        onFormCatChange(formCat, false);
-      }
-    }
-    if (!formBrandTouched) {
-      let hit = '';
-      for (const row of BRAND_KEYWORDS) {
-        if (row[0].some(k => matchKeyword(name, k))) { hit = row[1]; break; }
-      }
-      // 匹配不到时同样复位（如从品牌名改成无名品），避免旧品牌残留
-      if ($('#f-brand').value !== hit) $('#f-brand').value = hit;
-    }
-    if (!formCapacityTouched) {
-      const m = name.match(/(\d+(?:\.\d+)?)\s*(ml|毫升|g|克|片|支|l)(?![a-z])/i);
-      if (m) {
-        let unit = m[2].toLowerCase();
-        if (unit === '毫升') unit = 'ml';
-        if (unit === '克') unit = 'g';
-        if (unit === 'l') unit = 'L';
-        const val = m[1] + unit;
-        if (val !== formCapacity) { formCapacity = val; buildCapacity(); }
-      }
-    }
-  }
 
   function renderDateField() {
     $('#f-date').value = formDate ? fmtDateCN(formDate) : '';
     $('#f-date').closest('.date-field').classList.toggle('has-value', !!formDate);
     $('#f-open-date').value = formOpenDate ? fmtDateCN(formOpenDate) : '';
     $('#f-open-date').closest('.date-field').classList.toggle('has-value', !!formOpenDate);
+    $('#f-exp-date').value = formExpDate ? fmtDateCN(formExpDate) : '';
+    $('#f-exp-date').closest('.date-field').classList.toggle('has-value', !!formExpDate);
   }
 
-  // 容量选择（单选，再点一次取消；选项随分类联动；智能识别出的非常规规格显示为临时项）
-  function buildCapacity() {
-    const el = document.getElementById('f-capacity'); el.innerHTML = '';
-    const opts = capacityOptionsFor(formCat).slice();
-    if (formCapacity && opts.indexOf(formCapacity) < 0) opts.push(formCapacity);
-    opts.forEach(s => {
-      const b = document.createElement('button');
-      b.className = 'opt' + (formCapacity === s ? ' on' : '');
-      b.textContent = s;
-      b.onclick = () => { formCapacity = (formCapacity === s ? '' : s); formCapacityTouched = true; buildCapacity(); };
-      el.appendChild(b);
+  // 开封状态选择：切回「未开封」时隐藏并清空开封日期
+  function buildOpened() {
+    buildSeg('f-opened', OPENED_OPTS, () => formOpened, v => {
+      formOpened = v;
+      if (v === '未开封') formOpenDate = '';
+      syncOpenDateField();
+      renderDateField();
     });
   }
-  // 分类变化联动容量（touched：手动点击置位；自动匹配不置位）
-  function onFormCatChange(v, touched) {
-    formCat = v;
-    if (touched) formCatTouched = true;
-    if (formCapacity && capacityOptionsFor(v).indexOf(formCapacity) < 0) formCapacity = '';
-    buildCapacity();
-  }
-
-  function buildPao() {
-    const el = document.getElementById('f-pao'); el.innerHTML = '';
-    const opts = PAO_OPTS.slice();
-    if (formPao && opts.indexOf(formPao) < 0) opts.push(formPao);
-    opts.forEach(s => {
-      const b = document.createElement('button');
-      b.className = 'opt' + (formPao === s ? ' on' : '');
-      b.textContent = s;
-      b.onclick = () => { formPao = s; buildPao(); };
-      el.appendChild(b);
-    });
+  function syncOpenDateField() {
+    $('#field-open-date').style.display = formOpened === '已开封' ? '' : 'none';
   }
 
   function openAdd() {
     state.editingId = null; state.pendingImage = null; state.origImageUrl = null;
     $('#sheet-title').textContent = '添加美妆';
     $('#f-name').value = ''; $('#f-price').value = ''; $('#f-note').value = '';
-    $('#f-brand').value = ''; $('#f-shade').value = '';
-    formColor = ''; formUsage = []; formCat = CATEGORIES[0]; formSkin = '通用';
-    formDate = ''; formOpenDate = ''; formPao = '12个月'; formPlatform = ''; formCapacity = '';
-    formColorTouched = false; formCatTouched = false; formBrandTouched = false; formCapacityTouched = false;
+    $('#f-brand').value = ''; $('#f-shade').value = ''; $('#f-capacity').value = '';
+    formCat = CATEGORIES[0];
+    formDate = todayStr();   // 购入日期默认当天，可清空或修改
+    formOpenDate = ''; formOpened = '未开封'; formExpDate = ''; formPlatform = '';
     renderDateField();
     renderPfField();
     setPreview(null);
-    buildSeg('f-cat', CATEGORIES, () => formCat, v => onFormCatChange(v, true));
-    buildUsage(); buildSkin(); renderColorPicker(); buildCapacity(); buildPao();
+    buildSeg('f-cat', CATEGORIES, () => formCat, v => { formCat = v; });
+    buildOpened();
+    syncOpenDateField();
     openSheet();
-  }
-
-  function buildUsage() {
-    const el = $('#f-usage'); el.innerHTML = '';
-    USAGE_TIMES.forEach(u => {
-      const b = document.createElement('button');
-      b.className = 'opt' + (formUsage.includes(u) ? ' on' : '');
-      b.textContent = u;
-      b.onclick = () => { const i = formUsage.indexOf(u); if (i >= 0) { formUsage.splice(i, 1); } else { formUsage.push(u); } buildUsage(); };
-      el.appendChild(b);
-    });
-  }
-  function buildSkin() {
-    const el = $('#f-skin'); el.innerHTML = '';
-    SKINS.forEach(s => {
-      const b = document.createElement('button');
-      b.className = 'opt' + (formSkin === s ? ' on' : '');
-      b.textContent = s;
-      b.onclick = () => { formSkin = s; buildSkin(); };
-      el.appendChild(b);
-    });
   }
 
   function openEdit(item) {
@@ -1544,21 +1235,19 @@
     $('#f-note').value = item.note || '';
     $('#f-brand').value = item.brand || '';
     $('#f-shade').value = item.shade || '';
+    $('#f-capacity').value = item.capacity || '';
     formCat = item.category || CATEGORIES[0];
-    formColor = item.color || '';
-    formUsage = Array.isArray(item.usage_time) ? item.usage_time : [];
-    formSkin = item.skin || '通用';
     formDate = item.purchased_at || '';
     formOpenDate = item.opened_at || '';
-    formPao = item.pao_months ? (item.pao_months + '个月') : '12个月';
+    formOpened = isOpened(item) ? '已开封' : '未开封';   // 老数据无 opened 字段时按开封日期兜底
+    formExpDate = item.expire_date || '';
     formPlatform = item.platform || '';
-    formCapacity = item.capacity || '';
-    formColorTouched = true; formCatTouched = true; formBrandTouched = true; formCapacityTouched = true;  // 编辑已有记录：不随名称自动改动
     renderDateField();
     renderPfField();
     setPreview(item.image_url || null);
-    buildSeg('f-cat', CATEGORIES, () => formCat, v => onFormCatChange(v, true));
-    buildUsage(); buildSkin(); renderColorPicker(); buildCapacity(); buildPao();
+    buildSeg('f-cat', CATEGORIES, () => formCat, v => { formCat = v; });
+    buildOpened();
+    syncOpenDateField();
     openSheet();
   }
 
@@ -1583,15 +1272,26 @@
   let calYear = 0, calMonth = 1, tempDate = null;
   let calMode = 'days';   // 'days' 日视图 | 'ym' 年月选择面板
   let yearPage = 0;       // 年月面板起始年
-  let calTarget = 'purchase';  // 'purchase' 购入日期 | 'opened' 开封日期
+  let calTarget = 'purchase';  // 'purchase' 购入日期 | 'opened' 开封日期 | 'expire' 到期日期
 
   function monthStr() { return calYear + '-' + String(calMonth).padStart(2, '0'); }
-  function isFutureMonth() {
+  // 日历可选月份上限：购入/开封日期只能选到当月，到期日期放宽到 10 年后
+  function calMaxYM() {
     const t = new Date();
-    return calYear > t.getFullYear() || (calYear === t.getFullYear() && calMonth > t.getMonth() + 1);
+    if (calTarget === 'expire') return { y: t.getFullYear() + 10, m: 12 };
+    return { y: t.getFullYear(), m: t.getMonth() + 1 };
   }
-  function targetDate() { return calTarget === 'opened' ? formOpenDate : formDate; }
-  function setTargetDate(v) { if (calTarget === 'opened') formOpenDate = v; else formDate = v; }
+  function isFutureMonth() {
+    const mx = calMaxYM();
+    return calYear > mx.y || (calYear === mx.y && calMonth > mx.m);
+  }
+  function setFormDate(target, v) {
+    if (target === 'opened') formOpenDate = v;
+    else if (target === 'expire') formExpDate = v;
+    else formDate = v;
+  }
+  function targetDate() { return calTarget === 'opened' ? formOpenDate : calTarget === 'expire' ? formExpDate : formDate; }
+  function setTargetDate(v) { setFormDate(calTarget, v); }
 
   function openCalendar(target) {
     calTarget = target;
@@ -1628,7 +1328,7 @@
       const ds = calYear + '-' + String(calMonth).padStart(2, '0') + '-' + String(d).padStart(2, '0');
       const weekend = (firstDay + d - 1) % 7 === 0 || (firstDay + d - 1) % 7 === 6;
       const cls = 'cal-d' + (weekend ? ' cal-weekend' : '') + (ds === today ? ' today' : '') + (ds === tempDate ? ' sel' : '');
-      const future = ds > today ? ' disabled' : '';
+      const future = (ds > today && calTarget !== 'expire') ? ' disabled' : '';
       html += '<button class="' + cls + '" data-d="' + ds + '"' + future + '>' + d + '</button>';
     }
     $('#cal-days').innerHTML = html;
@@ -1645,31 +1345,30 @@
     $('#cal-ym').style.display = '';
     $('#cal-prev').style.display = 'none'; $('#cal-next').style.display = 'none';
 
-    const now = new Date();
-    const nowY = now.getFullYear(), nowM = now.getMonth() + 1;
-    const yEnd = Math.min(yearPage + 11, nowY);
+    const mx = calMaxYM();
+    const yEnd = Math.min(yearPage + 11, mx.y);
     let html = '<div class="ym-decade">' +
       '<button class="cal-nav" id="ym-prev"' + (yearPage <= CAL_MIN.y ? ' disabled' : '') + '>‹</button>' +
       '<span class="d-lbl">' + yearPage + ' — ' + yEnd + '</span>' +
-      '<button class="cal-nav" id="ym-next"' + (yEnd >= nowY ? ' disabled' : '') + '>›</button>' +
+      '<button class="cal-nav" id="ym-next"' + (yEnd >= mx.y ? ' disabled' : '') + '>›</button>' +
       '</div>';
     html += '<div class="ym-lbl">年份</div><div class="ym-grid">';
     for (let i = 0; i < 12; i++) {
       const y = yearPage + i;
-      if (y > nowY) { html += '<span></span>'; continue; }
+      if (y > mx.y) { html += '<span></span>'; continue; }
       html += '<button class="ym-opt' + (y === calYear ? ' on' : '') + '" data-y="' + y + '">' + y + '</button>';
     }
     html += '</div>';
     html += '<div class="ym-lbl">月份</div><div class="ym-grid">';
     for (let m = 1; m <= 12; m++) {
-      const dis = (calYear === nowY && m > nowM) ? ' disabled' : '';
+      const dis = (calYear === mx.y && m > mx.m) ? ' disabled' : '';
       html += '<button class="ym-opt' + (m === calMonth ? ' on' : '') + '" data-m="' + m + '"' + dis + '>' + m + '月</button>';
     }
     html += '</div>';
     $('#cal-ym').innerHTML = html;
 
     $('#ym-prev').onclick = () => { yearPage = Math.max(CAL_MIN.y, yearPage - 12); renderYmPanel(); };
-    $('#ym-next').onclick = () => { yearPage = Math.min(yearPage + 12, Math.max(CAL_MIN.y, nowY - 11)); renderYmPanel(); };
+    $('#ym-next').onclick = () => { yearPage = Math.min(yearPage + 12, Math.max(CAL_MIN.y, mx.y - 11)); renderYmPanel(); };
     $('#cal-ym').querySelectorAll('[data-y]').forEach(b => {
       b.onclick = () => { calYear = +b.dataset.y; renderYmPanel(); };
     });
@@ -1680,12 +1379,13 @@
 
   $('#date-cal-btn').onclick = () => openCalendar('purchase');
   $('#open-cal-btn').onclick = () => openCalendar('opened');
+  $('#exp-cal-btn').onclick = () => openCalendar('expire');
   $('#cal-title').onclick = () => {
     if (calMode === 'days') {
-      const nowY = new Date().getFullYear();
+      const mx = calMaxYM();
       calMode = 'ym';
-      yearPage = Math.max(CAL_MIN.y, Math.min(calYear - 5, nowY - 11));
-      if (yearPage > nowY) yearPage = CAL_MIN.y;
+      yearPage = Math.max(CAL_MIN.y, Math.min(calYear - 5, mx.y - 11));
+      if (yearPage > mx.y) yearPage = CAL_MIN.y;
       renderCal();
     } else { calMode = 'days'; renderCal(); }
   };
@@ -1713,9 +1413,10 @@
   };
   $('#date-clear').onclick = (e) => { e.stopPropagation(); formDate = ''; tempDate = null; renderDateField(); };
   $('#open-date-clear').onclick = (e) => { e.stopPropagation(); formOpenDate = ''; tempDate = null; renderDateField(); };
+  $('#exp-date-clear').onclick = (e) => { e.stopPropagation(); formExpDate = ''; tempDate = null; renderDateField(); };
 
-  // 手输日期解析：支持 2024-05-20 / 2024年5月20日 / 2024.5.20 / 20240520 / 5-20（默认今年），不支持未来日期
-  function parseDateInput(str) {
+  // 手输日期解析：支持 2024-05-20 / 2024年5月20日 / 2024.5.20 / 20240520 / 5-20（默认今年）；默认不允许未来日期，allowFuture 用于到期日期（未来 10 年内）
+  function parseDateInput(str, allowFuture) {
     str = (str || '').trim().toLowerCase();
     if (!str) return '';
     let y = null, mo = null, d = null;
@@ -1728,24 +1429,27 @@
     const dt = new Date(y, mo - 1, d);
     if (dt.getFullYear() !== y || dt.getMonth() !== mo - 1 || dt.getDate() !== d) return '';
     const s = y + '-' + String(mo).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-    if (s > todayStr() || y < CAL_MIN.y) return '';
+    const maxD = allowFuture ? (new Date().getFullYear() + 10) + '-12-31' : todayStr();
+    if (s > maxD || y < CAL_MIN.y) return '';
     return s;
   }
-  function bindDateInput(input, isOpened) {
+  function bindDateInput(input, target) {
+    const allowFuture = target === 'expire';
     input.addEventListener('input', () => {
-      const s = parseDateInput(input.value);
-      if (s) { if (isOpened) formOpenDate = s; else formDate = s; renderDateField(); }
+      const s = parseDateInput(input.value, allowFuture);
+      if (s) { setFormDate(target, s); renderDateField(); }
     });
     input.addEventListener('blur', () => {
-      if (!input.value.trim()) { if (isOpened) formOpenDate = ''; else formDate = ''; renderDateField(); return; }
-      const s = parseDateInput(input.value);
-      if (s) { if (isOpened) formOpenDate = s; else formDate = s; }
+      if (!input.value.trim()) { setFormDate(target, ''); renderDateField(); return; }
+      const s = parseDateInput(input.value, allowFuture);
+      if (s) setFormDate(target, s);
       else toast('日期格式：2024-05-20 或 5月20日');
       renderDateField();
     });
   }
-  bindDateInput($('#f-date'), false);
-  bindDateInput($('#f-open-date'), true);
+  bindDateInput($('#f-date'), 'purchase');
+  bindDateInput($('#f-open-date'), 'opened');
+  bindDateInput($('#f-exp-date'), 'expire');
 
   // ---------- 购入渠道弹层 ----------
   function renderPfField() {
@@ -1879,8 +1583,6 @@
 
   // ---------- 事件绑定 ----------
   $('#fab').onclick = openAdd;
-  $('#f-name').addEventListener('input', smartMatch);
-  $('#f-brand').addEventListener('input', () => { formBrandTouched = true; });
   $('#mask').onclick = closeSheet;
   $('#btn-cancel').onclick = closeSheet;
   $('#upload-box').onclick = () => $('#file-input').click();
@@ -1909,19 +1611,18 @@
         const cur = state.view.find(x => x.id === state.editingId);
         imageUrl = cur ? cur.image_url : null;
       }
+      const opened = formOpened === '已开封';
       const payload = {
         name: name,
         brand: $('#f-brand').value.trim() || null,
         category: formCat,
-        capacity: formCapacity || null,
+        capacity: $('#f-capacity').value.trim() || null,
         shade: $('#f-shade').value.trim() || null,
-        color: formColor || null,
-        skin: formSkin,
-        usage_time: formUsage,
         price: Number($('#f-price').value) || 0,
         purchased_at: formDate || null,
-        opened_at: formOpenDate || null,
-        pao_months: parseInt(formPao) || 12,
+        opened: opened,
+        opened_at: opened ? (formOpenDate || null) : null,
+        expire_date: formExpDate || null,
         platform: formPlatform || null,
         image_url: imageUrl,
         note: $('#f-note').value.trim() || null
@@ -2022,9 +1723,11 @@
   };
   $('#exp-csv').onclick = () => {
     $('#export-dialog').classList.remove('show');
-    const cols = ['名称', '品牌', '分类', '容量', '色号', '颜色', '肤质', '使用时段', '金额', '购入时间', '购入渠道', '开封日期', '开封后用完(月)', '备注', '图片链接', '录入时间'];
-    const keys = ['name', 'brand', 'category', 'capacity', 'shade', 'color', 'skin', 'usage_time', 'price', 'purchased_at', 'platform', 'opened_at', 'pao_months', 'note', 'image_url', 'created_at'];
+    const cols = ['名称', '品牌', '分类', '容量', '色号', '颜色', '肤质', '使用时段', '金额', '购入时间', '购入渠道', '开封状态', '开封日期', '到期日期', '备注', '图片链接', '录入时间'];
+    const keys = ['name', 'brand', 'category', 'capacity', 'shade', 'color', 'skin', 'usage_time', 'price', 'purchased_at', 'platform', 'opened', 'opened_at', 'expire_date', 'note', 'image_url', 'created_at'];
     const cell = (v) => {
+      if (v === true) return '已开封';
+      if (v === false) return '未开封';
       if (v == null) return '';
       let s = Array.isArray(v) ? v.join('、') : String(v);
       if (/[",\r\n]/.test(s)) s = '"' + s.replace(/"/g, '""') + '"';
